@@ -1,6 +1,7 @@
 
 body{
    font-family:Arial,sans-serif;
+   margin-top:100px;
    padding:20px;
 }
 .container{
@@ -27,4 +28,5 @@ td{
 @media (max-width: 768px) {
    .container {flex-direction: column;}
    .editorBox {order: -1; margin-bottom: 20px;}
+
 }
