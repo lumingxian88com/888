@@ -2,6 +2,7 @@
 body{
    font-family:Arial,sans-serif;
    padding:20px;
+   padding-top:100px;
 }
 .container{
    display:flex;
@@ -14,7 +15,7 @@ table{
    max-width:100%;
    overflow-x:auto; 
    display:block;
-   margin-top:20px
+   margin-top:20px;
 }
 td{
    border:1px solid #999;
@@ -30,6 +31,7 @@ td{
    .editorBox {order: -1; margin-bottom: 20px;}
 
 }
+
 
 
 
