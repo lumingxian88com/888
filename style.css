@@ -14,7 +14,7 @@ table{
    max-width:100%;
    overflow-x:auto; 
    display:block;
-   margin-top:20px;
+   margin-top:0px;
 }
 td{
    border:1px solid #999;
@@ -30,6 +30,7 @@ td{
    .editorBox {order: -1; margin-bottom: 20px;}
 
 }
+
 
 
 
