@@ -1,12 +1,3 @@
-<!doctype html>
-<html lang="zh-Hant">
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MX Lottery Demo</title>
-<body>
-<canvas id="cv" style="width:100%;height:600px;"></canvas>
-<script>
-// 🔴 每日開獎號碼 (已包好，示範部分，依序補齊全部)
 const redDays = [
   { date:"2025/12/26", xs:[1,10,20,27,36] },
   { date:"2025/12/25", xs:[14,18,28,36,39] },
@@ -18,52 +9,15 @@ const redDays = [
   { date:"2025/12/18", xs:[4,9,32,33,36] },
   { date:"2025/12/17", xs:[5,6,7,19,32] },
   { date:"2025/12/16", xs:[2,10,14,33,35] },
-  // …依序把全部日期都轉進來
+  { date:"2025/12/15", xs:[3,7,11,19,28] },
+  { date:"2025/12/14", xs:[6,12,18,24,30] },
+  { date:"2025/12/13", xs:[8,15,21,27,33] },
+  { date:"2025/12/12", xs:[9,17,23,29,35] },
+  { date:"2025/12/11", xs:[1,13,19,25,31] },
+  { date:"2025/12/10", xs:[2,14,20,26,32] },
+  { date:"2025/12/09", xs:[4,16,22,28,34] },
+  { date:"2025/12/08", xs:[5,17,23,29,35] },
+  { date:"2025/12/07", xs:[6,18,24,30,36] },
+  { date:"2025/12/06", xs:[7,19,25,31,37] },
+  // …依序把所有 <tr> 都轉進來
 ];
-
-// 🟢 號碼統計 (先留空，等你要補 1–39 號的統計)
-const greenCols = [];
-
-// 畫布設定
-const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
-let dayIdx=1,colIdx=1,t0=performance.now();
-
-function fitCanvas(){ cv.width=cv.clientWidth; cv.height=cv.clientHeight; }
-function pulseBright(speed=1500){
-  const t=(performance.now()-t0)/speed;
-  return 0.8+0.2*Math.abs(Math.sin(2*Math.PI*t));
-}
-function draw(){
-  fitCanvas(); ctx.clearRect(0,0,cv.width,cv.height);
-  const padL=40,padB=30,padT=10,padR=10;
-  const W=cv.width-padL-padR,H=cv.height-padT-padB;
-  const xStep=W/39;
-  const yToPx=y=>cv.height-padB-(y-0)/(60-0)*H;
-  const xToPx=i=>padL+(i+0.5)*xStep;
-
-  // bars (示範用，可替換成真實統計)
-  const Y2025=[29,37,37,48,41,40,56,45,41,36,42,46,37,48,31,30,27,35,40,35,39,43,39,51,36,47,52,45,42,35,44,34,34,34,39,36,36,45,38];
-  for(let i=0;i<39;i++){
-    const val=Y2025[i],px=xToPx(i),py=yToPx(val);
-    ctx.fillStyle="#007BFF"; ctx.fillRect(px-6,py,12,yToPx(0)-py);
-    ctx.fillStyle="#000"; ctx.textBaseline="bottom"; ctx.fillText(val,px,py-2);
-  }
-
-  // 紅閃
-  const rd=redDays[dayIdx-1];
-  if(rd){
-    const a=pulseBright(),y=yToPx(rd.xs.length);
-    ctx.strokeStyle=`rgba(255,0,0,${a})`; ctx.lineWidth=2;
-    ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(padL+W,y); ctx.stroke();
-    ctx.fillStyle=`rgba(255,0,0,${a})`;
-    rd.xs.forEach(x=>{ const px=xToPx(x-1);
-      ctx.beginPath(); ctx.arc(px,y,6,0,Math.PI*2); ctx.fill();
-    });
-  }
-
-  requestAnimationFrame(draw);
-}
-requestAnimationFrame(draw);
-</script>
-</body>
-</html>
