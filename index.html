@@ -5,6 +5,16 @@
     <title>號碼監控站</title>
 </head>
 <body>
+<script>
+    // 第一步：把籃子裡的資料通通給 redDays
+var redDays = allHistoryData;
+
+// 第二步：叫電腦按日期排好（最新的排第一）
+redDays.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+// 第三步：這就是您說的 last，它會自動變成 2025 年最新的一天
+var last = redDays[0]; 
+</script>
     <script src="2026.js"></script>。
     <h2>目前狀態：<span id="stat">檢查中...</span></h2>
     <div id="box" style="border:3px solid red; padding:20px; font-size:24px; font-weight:bold;">
@@ -36,4 +46,5 @@
     </script>
 </body>
 </html>
+
 
