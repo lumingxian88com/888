@@ -1,3 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>我的自動監控中心</title>
+</head>
+<body style="background-color: #f0f0f0; padding: 20px; font-family: sans-serif;">
+
+    <h1>🤖 程序執行報告</h1>
+    
+    <div id="status-board" style="border: 3px dashed red; background: #fff; padding: 20px; min-height: 200px;">
+        <h2 style="color: red; margin-top: 0;">📋 日誌：</h2>
+        <div id="logs" style="line-height: 1.8; font-size: 18px;">等待程序啟動...</div>
+    </div>
+
+    <script>
 const redDays = [
   { date:"2025/12/26", xs:[1,10,20,27,36] },
   { date:"2025/12/25", xs:[14,18,28,36,39] },
@@ -20,4 +36,36 @@ const redDays = [
   { date:"2025/12/07", xs:[6,18,24,30,36] },
   { date:"2025/12/06", xs:[7,19,25,31,37] },
   // …依序把所有 <tr> 都轉進來
+
 ];
+
+    function logToScreen(msg) {
+            const logDiv = document.getElementById('logs');
+            if (logDiv.innerHTML.includes("等待程序啟動")) logDiv.innerHTML = "";
+            logDiv.innerHTML += `<div>${msg}</div>`;
+        }
+
+        // 執行邏輯
+        window.onload = function() {
+            logToScreen("🚀 程序已啟動...");
+            
+            // 抓出資料裡最新的日期
+            let latestInFile = redDays[0].date;
+            logToScreen("📁 檔案中最新的日期是: " + latestInFile);
+
+            // 檢查電腦裡的紀錄
+            let latestInStorage = localStorage.getItem('last_seen_date');
+            
+            if (latestInFile !== latestInStorage) {
+                logToScreen("<b style='color:red;'>📢 發現更新！</b>");
+                logToScreen("✨ 最新號碼是: " + redDays[0].xs.join(', '));
+                localStorage.setItem('last_seen_date', latestInFile);
+            } else {
+                logToScreen("😴 日期沒變，無需提醒。");
+            }
+        };
+    </script>
+</body>
+</html>
+
+      
