@@ -1,55 +1,37 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>我的自動監控中心</title>
+    <title>號碼監控站</title>
 </head>
-<body style="background-color: #f0f0f0; padding: 20px; font-family: sans-serif;">
+<body>
+    <h2>目前狀態：<span id="stat">檢查中...</span></h2>
+    <div id="box" style="border:3px solid red; padding:20px; font-size:24px; font-weight:bold;">
+        </div>
 
-    <h1>🤖 程序執行報告</h1>
-    
-    <div id="status-board" style="border: 3px dashed red; background: #fff; padding: 20px; min-height: 200px;">
-        <h2 style="color: red; margin-top: 0;">📋 日誌：</h2>
-        <div id="logs" style="line-height: 1.8; font-size: 18px;">等待程序啟動...</div>
-    </div>
+    <script>
+        // 1. 準備籃子
+        var allHistoryData = []; 
+    </script>
 
-<script>
- const redDays = [
-            { date: "2025/12/27", xs: [1, 15, 19, 28, 38] }, 
-            { date: "2025/12/26", xs: [1, 10, 20, 27, 36] },
-            { date: "2025/12/25", xs: [14, 18, 28, 36, 39] }
-];
+    <script src="2024.js"></script>
+    <script src="2025.js"></script>
 
-    function logToScreen(msg) {
-            const logDiv = document.getElementById('logs');
-            if (logDiv.innerHTML.includes("等待程序啟動")) logDiv.innerHTML = "";
-            logDiv.innerHTML += `<div>${msg}</div>`;
-        }
-
-        // 執行邏輯
+    <script>
         window.onload = function() {
-            logToScreen("🚀 程序已啟動...");
-            
-            // 抓出資料裡最新的日期
-            let latestInFile = redDays[0].date;
-            logToScreen("📁 檔案中最新的日期是: " + latestInFile);
-
-            // 檢查電腦裡的紀錄
-            let latestInStorage = localStorage.getItem('last_seen_date');
-            
-            if (latestInFile !== latestInStorage) {
-                logToScreen("<b style='color:red;'>📢 發現更新！</b>");
-                logToScreen("✨ 最新號碼是: " + redDays[0].xs.join(', '));
-                localStorage.setItem('last_seen_date', latestInFile);
+            if (allHistoryData.length > 0) {
+                // 自動按日期排序
+                allHistoryData.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                var top = allHistoryData[0];
+                document.getElementById('stat').innerText = "✅ 已連線";
+                document.getElementById('box').innerHTML = 
+                    "📅 日期：" + top.date + "<br>" +
+                    "🔢 號碼：" + top.xs.join(" , ");
             } else {
-                logToScreen("😴 日期沒變，無需提醒。");
+                document.getElementById('stat').innerText = "❌ 沒資料";
             }
         };
-</script>
+    </script>
 </body>
 </html>
-
-      
-
-
-
