@@ -2,7 +2,13 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>號碼監控站</title>
+    <title>號碼監控站 (含次數統計)</title>
+    <style>
+        .num-box { border:3px solid red; padding:20px; font-size:24px; font-weight:bold; margin-bottom:20px; }
+        .freq-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .freq-table th, .freq-table td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        .freq-table th { background-color: #f2f2f2; }
+    </style>
 </head>
 <body>
     <script> var allHistoryData = []; </script>
@@ -15,24 +21,51 @@
     <script src="2025.js"></script>
 
     <h2>目前狀態：<span id="stat">檢查中...</span></h2>
-    <div id="box" style="border:3px solid red; padding:20px; font-size:24px; font-weight:bold;">
-        </div>
+    
+    <h3>最新一期：</h3>
+    <div id="box" class="num-box"></div>
+
+    <h3>2020-2025 總次數統計 (01-39)：</h3>
+    <div id="freq-display"></div>
 
     <script>
         window.onload = function() {
             if (allHistoryData.length > 0) {
-                // 自動按日期排序（確保最新的一定在第一個）
+                // --- A. 排序並顯示最新一期 ---
                 allHistoryData.sort((a, b) => new Date(b.date) - new Date(a.date));
-                
-                // 抓第一筆資料
                 var top = allHistoryData[0];
-                
                 document.getElementById('stat').innerText = "✅ 已連線";
                 document.getElementById('box').innerHTML = 
                     "📅 日期：" + top.date + "<br>" +
                     "🔢 號碼：" + top.xs.join(" , ");
+
+                // --- B. 自動統計 01-39 出現次數 ---
+                var counts = new Array(40).fill(0); // 準備 1-39 的計數器
+                allHistoryData.forEach(item => {
+                    if (item.xs && item.xs.length === 5) {
+                        item.xs.forEach(numStr => {
+                            var n = parseInt(numStr, 10);
+                            if (n >= 1 && n <= 39) counts[n]++;
+                        });
+                    }
+                });
+
+                // --- C. 把次數顯示成表格 ---
+                var html = '<table class="freq-table"><tr><th>號碼</th>';
+                // 表格標題 (01-10, 11-20...)
+                for (let i = 1; i <= 39; i++) {
+                    let displayNum = i < 10 ? "0" + i : i;
+                    html += `<td>${displayNum}</td>`;
+                }
+                html += '</tr><tr><th>次數</th>';
+                for (let i = 1; i <= 39; i++) {
+                    html += `<td>${counts[i]}</td>`;
+                }
+                html += '</tr></table>';
+                document.getElementById('freq-display').innerHTML = html;
+
             } else {
-                document.getElementById('stat').innerText = "❌ 沒資料，請檢查檔案";
+                document.getElementById('stat').innerText = "❌ 沒資料，請檢查檔案內容格式是否為 concat";
             }
         };
     </script>
