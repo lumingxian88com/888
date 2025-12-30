@@ -1,59 +1,40 @@
-<!DOCTYPE<html lang="zh-TW">
+<!DOCTYPE html>
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <title>號碼監控站</title>
 </head>
 <body>
-<script> var allHistoryData = []; </script>
+    <script> var allHistoryData = []; </script>
 
-<script src="2020.js"></script>
-<script src="2021.js"></script>
-<script src="2022.js"></script>
-<script src="2023.js"></script>
-<script src="2024.js"></script>
-<script src="2025.js"></script>
+    <script src="2020.js"></script>
+    <script src="2021.js"></script>
+    <script src="2022.js"></script>
+    <script src="2023.js"></script>
+    <script src="2024.js"></script>
+    <script src="2025.js"></script>
 
-<script>
-    // 第一步：把籃子裡的資料通通給 redDays
-var redDays = allHistoryData;
-
-// 第二步：叫電腦按日期排好（最新的排第一）
-redDays.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-// 第三步：這就是您說的 last，它會自動變成 2025 年最新的一天
-var last = redDays[0]; 
-</script>
-    <script src="2026.js"></script>。
     <h2>目前狀態：<span id="stat">檢查中...</span></h2>
     <div id="box" style="border:3px solid red; padding:20px; font-size:24px; font-weight:bold;">
         </div>
 
     <script>
-        // 1. 準備籃子
-        var allHistoryData = []; 
-    </script>
-
-    <script src="2024.js"></script>
-    <script src="2025.js"></script>
-
-    <script>
         window.onload = function() {
             if (allHistoryData.length > 0) {
-                // 自動按日期排序
+                // 自動按日期排序（確保最新的一定在第一個）
                 allHistoryData.sort((a, b) => new Date(b.date) - new Date(a.date));
                 
+                // 抓第一筆資料
                 var top = allHistoryData[0];
+                
                 document.getElementById('stat').innerText = "✅ 已連線";
                 document.getElementById('box').innerHTML = 
                     "📅 日期：" + top.date + "<br>" +
                     "🔢 號碼：" + top.xs.join(" , ");
             } else {
-                document.getElementById('stat').innerText = "❌ 沒資料";
+                document.getElementById('stat').innerText = "❌ 沒資料，請檢查檔案";
             }
         };
     </script>
 </body>
 </html>
-
-
-
