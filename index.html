@@ -1,38 +1,44 @@
-<script src="11-19.js"></script>
-<script src="20-23.js"></script>
-<script src="2024.js"></script>
-<script src="2025.js"></script>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>數據整合測試</title>
+</head>
+<body>
+    <div id="result">讀取中...</div>
 
-<script>
-    // 建立總清單
-    var allHistoryData = [];
+    <script src="11-19.js"></script>
+    <script src="20-23.js"></script>
+    <script src="2024.js"></script>
+    <script src="2025.js"></script>
 
-    // 合併所有年份 (這裡的名字要跟 JS 檔案裡的 var 名稱一樣)
-    try {
-        if (typeof data2025 !== 'undefined') allHistoryData = allHistoryData.concat(data2025);
-        if (typeof data2024 !== 'undefined') allHistoryData = allHistoryData.concat(data2024);
-        if (typeof data20_23 !== 'undefined') allHistoryData = allHistoryData.concat(data20_23);
-        if (typeof data11_19 !== 'undefined') allHistoryData = allHistoryData.concat(data11_19);
-    } catch (e) {
-        console.log("合併時有檔案還沒準備好，沒關係");
-    }
+    <script>
+        // 2. 準備一個大籃子
+        var allData = [];
 
-    // 自動計算這 15 年來的總次數
-    var yearFreq = new Array(39).fill(0);
-    allHistoryData.forEach(item => {
-        if (item.xs) {
-            item.xs.forEach(num => {
-                let idx = parseInt(num, 10) - 1;
-                if (idx >= 0 && idx < 39) yearFreq[idx]++;
-            });
-        }
-    });
+        // 3. 把有抓到的檔案通通丟進去 (檢查你的 JS 檔 var 名字是不是叫這個)
+        if (typeof data2025 !== 'undefined') allData = allData.concat(data2025);
+        if (typeof data2024 !== 'undefined') allData = allData.concat(data2024);
+        if (typeof data20_23 !== 'undefined') allData = allData.concat(data20_23);
+        if (typeof data11_19 !== 'undefined') allData = allData.concat(data11_19);
 
-    // === 接下來這段是關鍵：把算好的 yearFreq 畫出來 ===
-    // 這裡放你原本畫 Chart.js 的程式碼
-    // 假設你的圖表物件叫 myChart，就寫：
-    if (typeof myChart !== 'undefined') {
-        myChart.data.datasets[0].data = yearFreq;
-        myChart.update();
-    }
-</script>
+        // 4. 計算總次數 (0-39 號)
+        var freq = new Array(40).fill(0); 
+        allData.forEach(function(row) {
+            if (row.xs) {
+                row.xs.forEach(function(num) {
+                    freq[parseInt(num)]++;
+                });
+            }
+        });
+
+        // 5. 直接把結果噴在畫面上
+        var output = "<h2>成功整合！總筆數：" + allData.length + "</h2>";
+        output += "<p>1號出現：" + freq[1] + " 次</p>";
+        output += "<p>2號出現：" + freq[2] + " 次</p>";
+        output += "<p>...以此類推</p>";
+        
+        document.getElementById('result').innerHTML = output;
+    </script>
+</body>
+</html>
