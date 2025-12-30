@@ -1,38 +1,25 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <title>號碼監控站</title>
-</head>
-<body>
-    <script> var allHistoryData = []; </script>
+<script src="11-19.js"></script>
+<script src="20-23.js"></script>
+<script src="2024.js"></script>
+<script src="2025.js"></script>
 
-    <script src="https://lumingxian88com.github.io/888/2020.js"></script>
-    <script src="https://lumingxian88com.github.io/888/2021.js"></script>
-    <script src="https://lumingxian88com.github.io/888/2022.js"></script>
-    <script src="https://lumingxian88com.github.io/888/2023.js"></script>
+<script>
+    // 1. 建立一個空的總表
+    var allHistoryData = [];
 
-    <script src="https://lumingxian88com.github.io/888/2024.js"></script>
-    <script src="https://lumingxian88com.github.io/888/2025.js"></script>
+    // 2. 把各檔案裡的資料通通「合體」
+    // 假設你在 2025.js 裡定義的陣列叫 data2025，在 2024.js 叫 data2024
+    allHistoryData = allHistoryData.concat(data2025, data2024, data20_23, data11_19);
 
-    <h2>目前狀態：<span id="stat">檢查中...</span></h2>
-    <div id="box" style="border:3px solid red; padding:20px; font-size:24px; font-weight:bold;"></div>
+    // 3. 自動算次數 (這就是你要的：管他幾年，放一起就自動數好)
+    var yearFreq = new Array(39).fill(0);
+    allHistoryData.forEach(item => {
+        item.xs.forEach(num => {
+            let idx = parseInt(num, 10) - 1;
+            if (idx >= 0 && idx < 39) yearFreq[idx]++;
+        });
+    });
 
-    <script>
-        window.onload = function() {
-            if (allHistoryData.length > 0) {
-                // 自動排序，確保顯示 2025/12/29 (或最新的一天)
-                allHistoryData.sort((a, b) => new Date(b.date) - new Date(a.date));
-                var top = allHistoryData[0];
-                
-                document.getElementById('stat').innerText = "✅ 已連線";
-                document.getElementById('box').innerHTML = 
-                    "📅 日期：" + top.date + "<br>" +
-                    "🔢 號碼：" + top.xs.join(" , ");
-            } else {
-                document.getElementById('stat').innerText = "❌ 資料讀取失敗，請檢查 GitHub 檔案";
-            }
-        };
-    </script>
-</body>
-</html>
+    // 4. 這裡就可以直接畫圖了！
+    drawMyChart(yearFreq); 
+</script>
