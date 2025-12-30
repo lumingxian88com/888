@@ -4,22 +4,37 @@
 <script src="2025.js"></script>
 
 <script>
-    // 1. 建立一個空的總表
+    // 1. 初始化總表
     var allHistoryData = [];
 
-    // 2. 把各檔案裡的資料通通「合體」
-    // 假設你在 2025.js 裡定義的陣列叫 data2025，在 2024.js 叫 data2024
-    allHistoryData = allHistoryData.concat(data2025, data2024, data20_23, data11_19);
+    // 2. 安全合體 (加上檢查，避免因為某個變數沒定義而白屏)
+    try {
+        if (typeof data2025 !== 'undefined') allHistoryData = allHistoryData.concat(data2025);
+        if (typeof data2024 !== 'undefined') allHistoryData = allHistoryData.concat(data2024);
+        if (typeof data20_23 !== 'undefined') allHistoryData = allHistoryData.concat(data20_23);
+        if (typeof data11_19 !== 'undefined') allHistoryData = allHistoryData.concat(data11_19);
+    } catch (e) {
+        console.error("資料合併出錯:", e);
+    }
 
-    // 3. 自動算次數 (這就是你要的：管他幾年，放一起就自動數好)
+    // 3. 自動算次數
     var yearFreq = new Array(39).fill(0);
-    allHistoryData.forEach(item => {
-        item.xs.forEach(num => {
-            let idx = parseInt(num, 10) - 1;
-            if (idx >= 0 && idx < 39) yearFreq[idx]++;
+    if (allHistoryData.length > 0) {
+        allHistoryData.forEach(item => {
+            if (item.xs && Array.isArray(item.xs)) {
+                item.xs.forEach(num => {
+                    let idx = parseInt(num, 10) - 1;
+                    if (idx >= 0 && idx < 39) yearFreq[idx]++;
+                });
+            }
         });
-    });
+    }
 
-    // 4. 這裡就可以直接畫圖了！
-    drawMyChart(yearFreq); 
+    // 4. 畫圖 (請確認你的繪圖 function 名字)
+    // 如果原本叫 drawChart 就改回 drawChart
+    if (typeof drawMyChart === 'function') {
+        drawMyChart(yearFreq);
+    } else {
+        console.error("找不到畫圖的 function！請檢查 drawMyChart 名稱是否正確");
+    }
 </script>
