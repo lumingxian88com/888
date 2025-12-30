@@ -1,4 +1,4 @@
-allHistoryData = allHistoryData.concat([
+allHistoryData = allHistoryData.concat([{date:"2025/12/29", xs:["05", "10", "13", "29", "37"]},
     {date:"2025/12/27", xs:["01", "15", "19", "28", "38"]},
     {date:"2025/12/26", xs:["01", "10", "20", "27", "36"]},
     {date:"2025/12/25", xs:["14", "18", "28", "36", "39"]},
