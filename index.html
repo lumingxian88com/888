@@ -1,47 +1,65 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>我的數據系統</title>
+    <title>YWN 數據分析系統</title>
     <style>
-        body { font-family: sans-serif; line-height: 1.6; padding: 20px; background: #f4f4f4; }
-        .row { background: white; margin-bottom: 5px; padding: 10px; border-radius: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .date { font-weight: bold; color: #333; margin-right: 10px; }
-        .nums { color: #d32f2f; letter-spacing: 1px; }
-        .summary { background: #333; color: white; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        body { font-family: "Microsoft JhengHei", sans-serif; background: #eee; padding: 20px; }
+        .dashboard { display: flex; gap: 20px; margin-bottom: 20px; }
+        .box { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); flex: 1; }
+        .count-item { display: inline-block; width: 60px; margin: 5px; padding: 5px; border-bottom: 2px solid #007bff; text-align: center; }
+        .num-ball { color: #d32f2f; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="summary" id="stat">正在載入數據...</div>
+<div class="dashboard">
+    <div class="box">
+        <h3>📊 統計結果 (號碼：出現次數)</h3>
+        <div id="statistics">計算中...</div>
+    </div>
+</div>
+
+<div class="box">
+    <h3>📜 歷史紀錄</h3>
     <div id="main-list"></div>
+</div>
 
-    <script src="1125.js"></script>
-    <script src="2025.js"></script>
+<script src="1125.js"></script>
+<script src="2025.js"></script>
 
-    <script>
-        // 1. 把所有變數集合起來 (請確保你在 js 檔裡分別命名為 ywn1125 和 ywn2025)
-        var allData = [];
-        
-        if (typeof ywn1125 !== 'undefined') allData = allData.concat(ywn1125);
-        if (typeof ywn2025 !== 'undefined') allData = allData.concat(ywn2025);
+<script>
+    var allData = [];
+    if (typeof ywn1125 !== 'undefined') allData = allData.concat(ywn1125);
+    if (typeof ywn2025 !== 'undefined') allData = allData.concat(ywn2025);
 
-        // 2. 更新總筆數
-        document.getElementById('stat').innerHTML = "總共找到 " + allData.length + " 筆數據";
+    // --- 這裡開始「算次數」 ---
+    var counts = {}; // 用來存次數的籃子
 
-        // 3. 開始產出清單
-        var htmlList = "";
-        
-        allData.forEach(function(item) {
-            // item[0] = 日期, item[1] = 星期, item[2] = 號碼陣列
-            htmlList += '<div class="row">' +
-                        '<span class="date">' + item[0] + ' (' + item[1] + ')</span>' +
-                        '<span class="nums">' + item[2].join(" , ") + '</span>' +
-                        '</div>';
+    allData.forEach(function(row) {
+        var numbers = row[2]; // 拿到那一排號碼 [1, 2, 3...]
+        numbers.forEach(function(n) {
+            counts[n] = (counts[n] || 0) + 1; // 如果看過這個號碼就 +1
         });
+    });
 
-        document.getElementById('main-list').innerHTML = htmlList;
-    </script>
+    // 把算好的次數印出來
+    var statHtml = "";
+    // 假設號碼是 1 到 49 號 (你可以根據需求改)
+    for (var i = 1; i <= 49; i++) {
+        if (counts[i]) {
+            statHtml += '<div class="count-item"><span class="num-ball">' + i + '</span>: ' + counts[i] + '次</div>';
+        }
+    }
+    document.getElementById('statistics').innerHTML = statHtml;
+
+    // --- 這裡開始「印清單」 ---
+    var listHtml = "";
+    allData.forEach(function(item) {
+        listHtml += '<p><b>' + item[0] + '</b> (' + item[1] + ') ➔ ' + item[2].join(", ") + '</p>';
+    });
+    document.getElementById('main-list').innerHTML = listHtml;
+</script>
 
 </body>
 </html>
