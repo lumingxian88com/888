@@ -1,34 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>YWN 數據清單</title>
+    <title>我的數據系統</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 20px; background: #f4f4f4; }
+        .row { background: white; margin-bottom: 5px; padding: 10px; border-radius: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .date { font-weight: bold; color: #333; margin-right: 10px; }
+        .nums { color: #d32f2f; letter-spacing: 1px; }
+        .summary { background: #333; color: white; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+    </style>
 </head>
 <body>
-    <div id="box"></div>
+
+    <div class="summary" id="stat">正在載入數據...</div>
+    <div id="main-list"></div>
 
     <script src="1125.js"></script>
     <script src="2025.js"></script>
 
     <script>
-        // 因為你的變數在 .js 裡都叫 ywn，
-        // 如果兩個檔案都用 var ywn，後面的會覆蓋前面的。
-        // 建議你在 .js 裡分別取名 ywn1125 和 ywn2025。
-        
+        // 1. 把所有變數集合起來 (請確保你在 js 檔裡分別命名為 ywn1125 和 ywn2025)
         var allData = [];
+        
         if (typeof ywn1125 !== 'undefined') allData = allData.concat(ywn1125);
         if (typeof ywn2025 !== 'undefined') allData = allData.concat(ywn2025);
 
-        var content = "<h2>資料筆數：" + allData.length + "</h2>";
+        // 2. 更新總筆數
+        document.getElementById('stat').innerHTML = "總共找到 " + allData.length + " 筆數據";
 
+        // 3. 開始產出清單
+        var htmlList = "";
+        
         allData.forEach(function(item) {
-            // item[0] 是日期
-            // item[1] 是星期
-            // item[2] 是號碼陣列
-            content += "<p>日期：" + item[0] + " (" + item[1] + ") 號碼：" + item[2].join(", ") + "</p>";
+            // item[0] = 日期, item[1] = 星期, item[2] = 號碼陣列
+            htmlList += '<div class="row">' +
+                        '<span class="date">' + item[0] + ' (' + item[1] + ')</span>' +
+                        '<span class="nums">' + item[2].join(" , ") + '</span>' +
+                        '</div>';
         });
 
-        document.getElementById('box').innerHTML = content;
+        document.getElementById('main-list').innerHTML = htmlList;
     </script>
+
 </body>
 </html>
