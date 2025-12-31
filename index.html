@@ -2,31 +2,33 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>數據顯示</title>
+    <title>YWN 數據清單</title>
 </head>
 <body>
-    <div id="display"></div>
+    <div id="box"></div>
 
     <script src="1125.js"></script>
     <script src="2025.js"></script>
 
     <script>
-        // 1. 合併兩個檔案的資料
+        // 因為你的變數在 .js 裡都叫 ywn，
+        // 如果兩個檔案都用 var ywn，後面的會覆蓋前面的。
+        // 建議你在 .js 裡分別取名 ywn1125 和 ywn2025。
+        
         var allData = [];
-        if (typeof data1125 !== 'undefined') allData = allData.concat(data1125);
-        if (typeof data2025 !== 'undefined') allData = allData.concat(data2025);
+        if (typeof ywn1125 !== 'undefined') allData = allData.concat(ywn1125);
+        if (typeof ywn2025 !== 'undefined') allData = allData.concat(ywn2025);
 
-        // 2. 準備要顯示的內容
-        var html = "<h2>目前總筆數：" + allData.length + "</h2>";
+        var content = "<h2>資料筆數：" + allData.length + "</h2>";
 
-        // 3. 跑迴圈把每一筆資料印出來
-        allData.forEach(function(row) {
-            // row[0] 是日期, row[1] 是星期, row[2] 是號碼陣列
-            html += "<p>" + row[0] + " (" + row[1] + ") 號碼：" + row[2] + "</p>";
+        allData.forEach(function(item) {
+            // item[0] 是日期
+            // item[1] 是星期
+            // item[2] 是號碼陣列
+            content += "<p>日期：" + item[0] + " (" + item[1] + ") 號碼：" + item[2].join(", ") + "</p>";
         });
 
-        // 4. 最後一次噴到網頁上
-        document.getElementById('display').innerHTML = html;
+        document.getElementById('box').innerHTML = content;
     </script>
 </body>
 </html>
