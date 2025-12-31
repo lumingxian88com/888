@@ -2,39 +2,31 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>數據整合測試</title>
+    <title>數據顯示</title>
 </head>
 <body>
-    <div id="result">讀取中...</div>
+    <div id="display"></div>
+
     <script src="1125.js"></script>
     <script src="2025.js"></script>
 
     <script>
-        // 2. 準備一個大籃子
-        var ywn = [];
+        // 1. 合併兩個檔案的資料
+        var allData = [];
+        if (typeof data1125 !== 'undefined') allData = allData.concat(data1125);
+        if (typeof data2025 !== 'undefined') allData = allData.concat(data2025);
 
-        // 3. 把有抓到的檔案通通丟進去 (檢查你的 JS 檔 var 名字是不是叫這個)
-        if (typeof data2025 !== 'undefined') ywn = ywn.concat(data2025);
-        if (typeof data1125 !== 'undefined') ywn = ywn.concat(data1125);
+        // 2. 準備要顯示的內容
+        var html = "<h2>目前總筆數：" + allData.length + "</h2>";
 
-        // 4. 計算總次數 (0-39 號)
-        var freq = new Array(40).fill(0); 
-        ywn.forEach(function(row) {
-            if (row.xs) {
-                row.xs.forEach(function(num) {
-                    freq[parseInt(num)]++;
-                });
-            }
+        // 3. 跑迴圈把每一筆資料印出來
+        allData.forEach(function(row) {
+            // row[0] 是日期, row[1] 是星期, row[2] 是號碼陣列
+            html += "<p>" + row[0] + " (" + row[1] + ") 號碼：" + row[2] + "</p>";
         });
 
-        // 5. 直接把結果噴在畫面上
-        var output = "<h2>成功整合！總筆數：" + ywn.length + "</h2>";
-        output += "<p>1號出現：" + freq[1] + " 次</p>";
-        output += "<p>2號出現：" + freq[2] + " 次</p>";
-        output += "<p>...以此類推</p>";
-        
-        document.getElementById('result').innerHTML = output;
+        // 4. 最後一次噴到網頁上
+        document.getElementById('display').innerHTML = html;
     </script>
 </body>
 </html>
-
